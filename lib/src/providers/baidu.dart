@@ -133,8 +133,8 @@ class LocationServiceProviderBaidu implements LocationServiceProvider {
     isNeedLocationPoiList: false,
     isNeedNewVersionRgc: false,
     openGps: true,
-    locationPurpose: BMFLocationPurpose.signIn);
-    androidOption.setScanspan(1000); // 设置发起定位请求时间间隔
+    locationPurpose: BMFLocationPurpose.signIn,
+    scanspan: 1000);
 
     Map androidMap = androidOption.getMap();
 
