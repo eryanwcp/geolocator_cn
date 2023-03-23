@@ -38,6 +38,8 @@ class LocationData {
   /// The name of the provider that generated this data.
   final String provider;
 
+  final String? address;
+
   /// accuracy
   final double accuracy;
 
@@ -49,6 +51,7 @@ class LocationData {
       double longitude = 0.0,
       CRS crs = CRS.unknown,
       String provider = '',
+      String? address,
       double accuracy = 500,
       int timestamp = 0}) {
     return LocationData._(
@@ -56,11 +59,12 @@ class LocationData {
         longitude.toPrecision(6),
         crs,
         provider,
+        address,
         accuracy.toPrecision(1),
         DateTime.now().millisecondsSinceEpoch ~/ 1000);
   }
 
-  LocationData._(this.latitude, this.longitude, this.crs, this.provider,
+  LocationData._(this.latitude, this.longitude, this.crs, this.provider,this.address,
       this.accuracy, this.timestamp);
 
   factory LocationData.fromMap(Map<String, dynamic> dataMap) {
@@ -69,6 +73,7 @@ class LocationData {
         longitude: dataMap['longitude'],
         crs: dataMap['crs'],
         provider: dataMap['provider'],
+        address: dataMap['address'],
         accuracy: dataMap['accuracy'],
         timestamp: dataMap['timestamp']);
   }
@@ -79,6 +84,7 @@ class LocationData {
       'longitude': longitude,
       'crs': crs.toString().split('.').last,
       'provider': provider,
+      'address': address,
       'accuracy': accuracy,
       'timestamp': timestamp
     };
@@ -99,6 +105,14 @@ class LocationData {
 
   @override
   int get hashCode => latitude.hashCode ^ longitude.hashCode ^ crs.hashCode;
+
+  bool isSuccess() {
+    return true;
+  }
+
+  bool hasAddress() {
+    return address != null && address.isNotEmpty;
+  }
 }
 
 abstract class LocationServiceProvider {

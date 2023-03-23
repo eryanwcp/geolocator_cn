@@ -72,7 +72,8 @@ class LocationServiceProviderAmap implements LocationServiceProvider {
         longitude: double.tryParse("${_lastResult?['longitude']}") ?? 0,
         accuracy: double.tryParse("${_lastResult?['accuracy']}") ?? 0,
         crs: CRS.gcj02,
-        provider: name);
+        provider: name,
+        address: "${_lastResult?['address']}");
   }
 
   ///开始定位
@@ -95,7 +96,7 @@ class LocationServiceProviderAmap implements LocationServiceProvider {
     locationOption.onceLocation = true;
 
     ///是否需要返回逆地理信息
-    locationOption.needAddress = false;
+    locationOption.needAddress = true;
 
     ///逆地理信息的语言类型
     locationOption.geoLanguage = GeoLanguage.DEFAULT;

@@ -46,7 +46,8 @@ class LocationServiceProviderBaidu implements LocationServiceProvider {
         latitude: _lastResult?.latitude ?? 0,
         longitude: _lastResult?.longitude ?? 0,
         crs: CRS.bd09,
-        accuracy: _lastResult?.radius ?? 0);
+        accuracy: _lastResult?.radius ?? 0,
+        address: _lastResult?.address);
   }
 
   void _init() {
@@ -128,10 +129,10 @@ class LocationServiceProviderBaidu implements LocationServiceProvider {
     /// android 端设置定位参数
     BaiduLocationAndroidOption androidOption = BaiduLocationAndroidOption(coordType: BMFLocationCoordType.bd09ll,
     locationMode: BMFLocationMode.hightAccuracy,
-    isNeedAddress: false,
-    isNeedAltitude: false,
+    isNeedAddress: true,
+    isNeedAltitude: true,
     isNeedLocationPoiList: false,
-    isNeedNewVersionRgc: false,
+    isNeedNewVersionRgc: true,
     openGps: true,
     locationPurpose: BMFLocationPurpose.signIn,
     scanspan: 1000);
