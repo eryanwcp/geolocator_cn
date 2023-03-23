@@ -51,12 +51,14 @@ class LocationServiceProviderBaidu implements LocationServiceProvider {
     if (inited) {
       return;
     }
-
+    _locationPlugin.setAgreePrivacy(true);
     /// 设置ios端ak, android端ak可以直接在清单文件中配置
     if (Platform.isIOS) {
       /// 设置ios端ak, android端ak可以直接在清单文件中配置
       _locationPlugin.authAK(iosKey);
     }
+
+
 
     _locationPlugin.seriesLocationCallback(callback: (BaiduLocation result) {
       if (result.latitude != null && result.longitude != null) {

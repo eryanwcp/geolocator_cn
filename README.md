@@ -7,7 +7,7 @@
   - system ✅
   - baidu ✅
   - amap ✅
-  - ip locaton✅
+  - ip locaton✅(可能需翻墙)
 - Auto handle permission requests.
 - Auto transform CRS to GCJ02 in mainland China.
   Or you can set the CRS manually
@@ -18,7 +18,7 @@ Add this to your package's pubspec.yaml file:
 
 ```dart
 dependencies:
-  geolocator_cn: ^1.1.0
+  geolocator_cn: ^1.2.2
 ```
 
 ## Configure
