@@ -47,7 +47,7 @@ class LocationServiceProviderBaidu implements LocationServiceProvider {
         longitude: _lastResult?.longitude ?? 0,
         crs: CRS.bd09,
         accuracy: _lastResult?.radius ?? 0,
-        address: _lastResult?.address);
+        address: _lastResult?.address ?? '');
   }
 
   void _init() {
