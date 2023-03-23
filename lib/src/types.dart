@@ -38,7 +38,7 @@ class LocationData {
   /// The name of the provider that generated this data.
   final String provider;
 
-  final String? address;
+  final String address;
 
   /// accuracy
   final double accuracy;
@@ -51,7 +51,7 @@ class LocationData {
       double longitude = 0.0,
       CRS crs = CRS.unknown,
       String provider = '',
-      String? address,
+      String address = '',
       double accuracy = 500,
       int timestamp = 0}) {
     return LocationData._(
@@ -101,7 +101,8 @@ class LocationData {
       other is LocationData &&
           latitude == other.latitude &&
           longitude == other.longitude &&
-          crs == other.crs;
+          crs == other.crs &&
+          address == other.address;
 
   @override
   int get hashCode => latitude.hashCode ^ longitude.hashCode ^ crs.hashCode;
@@ -111,7 +112,7 @@ class LocationData {
   }
 
   bool hasAddress() {
-    return address != null && address.isNotEmpty;
+    return address.isNotEmpty;
   }
 }
 
