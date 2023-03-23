@@ -1,12 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_bmflocation/flutter_bmflocation.dart';
 import 'package:geolocator_cn/src/types.dart';
-
-import 'package:flutter_bmflocation/bdmap_location_flutter_plugin.dart';
-import 'package:flutter_bmflocation/flutter_baidu_location.dart';
-import 'package:flutter_bmflocation/flutter_baidu_location_android_option.dart';
-import 'package:flutter_bmflocation/flutter_baidu_location_ios_option.dart';
 
 class LocationServiceProviderBaidu implements LocationServiceProvider {
   @override
@@ -59,14 +55,12 @@ class LocationServiceProviderBaidu implements LocationServiceProvider {
     /// 设置ios端ak, android端ak可以直接在清单文件中配置
     if (Platform.isIOS) {
       /// 设置ios端ak, android端ak可以直接在清单文件中配置
-      LocationFlutterPlugin.setApiKey(iosKey);
+      _locationPlugin.authAK(iosKey);
     }
 
-    _locationPlugin.onResultCallback().listen((Map<String, Object>? result) {
-      BaiduLocation _baiduLocation = BaiduLocation.fromMap(result);
-
-      if (_baiduLocation.latitude != null && _baiduLocation.longitude != null) {
-        _lastResult = _baiduLocation;
+    _locationPlugin.seriesLocationCallback(callback: (BaiduLocation result) {
+      if (result.latitude != null && result.longitude != null) {
+        _lastResult = result;
         _stopLocation();
       }
     });
@@ -96,28 +90,25 @@ class LocationServiceProviderBaidu implements LocationServiceProvider {
   /// 设置android端和ios端定位参数
   void _setLocOption() {
     /// android 端设置定位参数
-    BaiduLocationAndroidOption androidOption = BaiduLocationAndroidOption();
-    androidOption.setCoorType("BD09ll"); // 设置返回的位置坐标系类型
+    BaiduLocationAndroidOption androidOption = BaiduLocationAndroidOption(coordType: BMFLocationCoordType.bd09ll);
     androidOption.setIsNeedAltitude(false); // 设置是否需要返回海拔高度信息
-    androidOption.setIsNeedAddres(false); // 设置是否需要返回地址信息
+    androidOption.setIsNeedAddress(false); // 设置是否需要返回地址信息
     androidOption.setIsNeedLocationPoiList(false); // 设置是否需要返回周边poi信息
     androidOption.setIsNeedNewVersionRgc(false); // 设置是否需要返回最新版本rgc信息
     androidOption.setIsNeedLocationDescribe(false); // 设置是否需要返回位置描述
     androidOption.setOpenGps(true); // 设置是否需要使用gps
-    androidOption.setLocationMode(LocationMode.Battery_Saving); // 设置定位模式
+    androidOption.setLocationMode(BMFLocationMode.hightAccuracy); // 设置定位模式
     androidOption.setScanspan(1000); // 设置发起定位请求时间间隔
 
     Map androidMap = androidOption.getMap();
 
     /// ios 端设置定位参数
-    BaiduLocationIOSOption iosOption = BaiduLocationIOSOption();
+    BaiduLocationIOSOption iosOption = BaiduLocationIOSOption(coordType: BMFLocationCoordType.bd09ll);
     iosOption.setIsNeedNewVersionRgc(true); // 设置是否需要返回最新版本rgc信息
-    iosOption.setBMKLocationCoordinateType(
-        "BMKLocationCoordinateTypeBMK09LL"); // 设置返回的位置坐标系类型
-    iosOption.setActivityType("CLActivityTypeFitness"); // 设置应用位置类型
+    iosOption.setActivityType(BMFActivityType.fitness); // 设置应用位置类型
     iosOption.setLocationTimeout(10); // 设置位置获取超时时间
     iosOption
-        .setDesiredAccuracy("kCLLocationAccuracyNearestTenMeters"); // 设置预期精度参数
+        .setDesiredAccuracy(BMFDesiredAccuracy.nearestTenMeters); // 设置预期精度参数
     iosOption.setReGeocodeTimeout(10); // 设置获取地址信息超时时间
     iosOption.setDistanceFilter(0); // 设置定位最小更新距离
     iosOption.setAllowsBackgroundLocationUpdates(false); // 是否允许后台定位
