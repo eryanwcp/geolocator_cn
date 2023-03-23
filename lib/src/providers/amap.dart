@@ -113,7 +113,7 @@ class LocationServiceProviderAmap implements LocationServiceProvider {
     ///<li>[AMapLocationMode.Battery_Saving]</li>
     ///<li>[AMapLocationMode.Device_Sensors]</li>
     ///<li>[AMapLocationMode.Hight_Accuracy]</li>
-    locationOption.locationMode = AMapLocationMode.Battery_Saving;
+    locationOption.locationMode = AMapLocationMode.Hight_Accuracy;
 
     ///设置iOS端的定位最小更新距离<br>
     locationOption.distanceFilter = -1;
@@ -125,7 +125,7 @@ class LocationServiceProviderAmap implements LocationServiceProvider {
     /// <li>[DesiredAccuracy.NearestTenMeters] 10米 </li>
     /// <li>[DesiredAccuracy.Kilometer] 1000米</li>
     /// <li>[DesiredAccuracy.ThreeKilometers] 3000米</li>
-    locationOption.desiredAccuracy = DesiredAccuracy.HundredMeters;
+    locationOption.desiredAccuracy = DesiredAccuracy.NearestTenMeters;
 
     ///设置iOS端是否允许系统暂停定位
     locationOption.pausesLocationUpdatesAutomatically = true;
