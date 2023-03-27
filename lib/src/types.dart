@@ -118,11 +118,18 @@ class LocationData {
 
 abstract class LocationServiceProvider {
   late String name;
+  late bool enable = true;
 
   LocationServiceProvider();
 
+  bool isEnable(){
+    return enable;
+  }
+
   /// Returns the current location of the device.
   Future<LocationData> getLocation();
+
+
 
   setKey({String androidKey = '', String iosKey = ''});
 }

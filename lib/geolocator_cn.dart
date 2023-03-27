@@ -56,15 +56,17 @@ class GeolocatorCN {
 
       /// 哪个先返回有效结果就用哪个
       for (var provider in providers) {
-        provider.getLocation().then((value) {
-          if (value.latitude != 0 && value.longitude != 0) {
-            if (c.isCompleted != true) {
-              c.complete(value);
+        if(provider.isEnable()){
+          provider.getLocation().then((value) {
+            if (value.latitude != 0 && value.longitude != 0) {
+              if (c.isCompleted != true) {
+                c.complete(value);
+              }
             }
-          }
-        }).catchError((e) {
-          print(e);
-        });
+          }).catchError((e) {
+            print(e);
+          });
+        }
       }
 
       try {
