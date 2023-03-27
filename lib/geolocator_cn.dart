@@ -56,7 +56,9 @@ class GeolocatorCN {
 
       /// 哪个先返回有效结果就用哪个
       for (var provider in providers) {
-        if(provider.isEnable()){
+        if(!provider.isEnable()){
+          print("GPS服务不可用：${provider.name}");
+        }else{
           provider.getLocation().then((value) {
             if (value.latitude != 0 && value.longitude != 0) {
               if (c.isCompleted != true) {

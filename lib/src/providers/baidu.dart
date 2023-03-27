@@ -6,7 +6,7 @@ import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart'
 import 'package:flutter_bmflocation/flutter_bmflocation.dart';
 import 'package:geolocator_cn/src/types.dart';
 
-class LocationServiceProviderBaidu implements LocationServiceProvider {
+class LocationServiceProviderBaidu extends LocationServiceProvider {
   @override
   String name = 'baidu';
 

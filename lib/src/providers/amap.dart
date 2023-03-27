@@ -4,7 +4,7 @@ import 'package:geolocator_cn/src/types.dart';
 import 'package:amap_flutter_location/amap_flutter_location.dart';
 import 'package:amap_flutter_location/amap_location_option.dart';
 
-class LocationServiceProviderAmap implements LocationServiceProvider {
+class LocationServiceProviderAmap extends LocationServiceProvider {
   @override
   String name = 'amap';
 

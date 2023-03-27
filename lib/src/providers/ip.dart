@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:geolocator_cn/src/types.dart';
 import 'package:http/http.dart' as http;
 
-class LocationServiceProviderIPaddr implements LocationServiceProvider {
+class LocationServiceProviderIPaddr extends LocationServiceProvider {
   @override
   String name = 'ip';
 

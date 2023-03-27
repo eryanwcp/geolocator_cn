@@ -1,7 +1,7 @@
 import 'package:geolocator_cn/src/types.dart';
 import 'package:geolocator/geolocator.dart';
 
-class LocationServiceProviderSystem implements LocationServiceProvider {
+class LocationServiceProviderSystem extends LocationServiceProvider {
   @override
   String name = 'system';
 
