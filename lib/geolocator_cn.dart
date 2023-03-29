@@ -62,13 +62,6 @@ class GeolocatorCN {
       }).catchError((e) {
         print(e);
       });
-      // GeolocatorCNProviders.web2.getLocation().then((value) {
-      //   if (c.isCompleted != true) {
-      //     c.complete(value);
-      //   }
-      // }).catchError((e) {
-      //   print(e);
-      // });
       try {
         location = await c.future;
       } catch (e) {
