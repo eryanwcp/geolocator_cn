@@ -55,7 +55,14 @@ class GeolocatorCN {
     LocationData location = LocationData();
     Completer c = Completer();
     if(kIsWeb){
-      GeolocatorCNProviders.web.getLocation().then((value) {
+      // GeolocatorCNProviders.web.getLocation().then((value) {
+      //   if (c.isCompleted != true) {
+      //     c.complete(value);
+      //   }
+      // }).catchError((e) {
+      //   print(e);
+      // });
+      GeolocatorCNProviders.system.getLocation().then((value) {
         if (c.isCompleted != true) {
           c.complete(value);
         }

@@ -34,6 +34,7 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
         longitude: position?.longitude ?? 0,
         crs: CRS.wgs84,
         provider: name,
+        address: '地址未知',
         accuracy: position?.accuracy ?? 0);
   }
 }
