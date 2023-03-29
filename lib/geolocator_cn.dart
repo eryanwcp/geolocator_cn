@@ -2,6 +2,7 @@ library geolocator_cn;
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator_cn/src/providers/web.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:coordtransform/coordtransform.dart';
 import 'src/providers/baidu.dart';
@@ -23,6 +24,7 @@ class GeolocatorCNProviders {
   static LocationServiceProviderSystem system = LocationServiceProviderSystem();
   static LocationServiceProviderAmap amap = LocationServiceProviderAmap(
       config['amap']['android'], config['amap']['ios']);
+  static LocationServiceProviderWeb web = LocationServiceProviderWeb();
   static LocationServiceProviderIPaddr ip = LocationServiceProviderIPaddr();
 }
 
@@ -52,7 +54,7 @@ class GeolocatorCN {
   Future<LocationData> getLocation({CRS crs = CRS.gcj02}) async {
     LocationData location = LocationData();
     if(kIsWeb){
-      GeolocatorCNProviders.system.getLocation().then((value) {
+      GeolocatorCNProviders.web.getLocation().then((value) {
         if (value.latitude != 0 && value.longitude != 0) {
           location = value;
         }
