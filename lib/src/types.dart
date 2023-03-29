@@ -26,8 +26,6 @@ extension Precision on double {
 
 /// The response object of [GeolocatorCN.getLocation] and [GeolocatorCN.onLocationChanged]
 class LocationData {
-  //是否有权限
-  final bool hasPermission;
   /// The latitude of the location
   final double latitude;
 
@@ -49,8 +47,7 @@ class LocationData {
   final int timestamp;
 
   factory LocationData(
-      {bool hasPermission = true,
-      double latitude = 0.0,
+      {double latitude = 0.0,
       double longitude = 0.0,
       CRS crs = CRS.unknown,
       String provider = '',
@@ -58,7 +55,6 @@ class LocationData {
       double accuracy = 500,
       int timestamp = 0}) {
     return LocationData._(
-        hasPermission,
         latitude.toPrecision(6),
         longitude.toPrecision(6),
         crs,
@@ -68,12 +64,11 @@ class LocationData {
         DateTime.now().millisecondsSinceEpoch ~/ 1000);
   }
 
-  LocationData._(this.hasPermission,this.latitude, this.longitude, this.crs, this.provider,this.address,
+  LocationData._(this.latitude, this.longitude, this.crs, this.provider,this.address,
       this.accuracy, this.timestamp);
 
   factory LocationData.fromMap(Map<String, dynamic> dataMap) {
     return LocationData(
-        hasPermission: dataMap['hasPermission'],
         latitude: dataMap['latitude'],
         longitude: dataMap['longitude'],
         crs: dataMap['crs'],
@@ -85,7 +80,6 @@ class LocationData {
 
   Map<String, dynamic> toMap() {
     return {
-      'hasPermission': hasPermission,
       'latitude': latitude,
       'longitude': longitude,
       'crs': crs.toString().split('.').last,
