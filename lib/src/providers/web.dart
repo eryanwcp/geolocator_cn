@@ -20,7 +20,7 @@ class LocationServiceProviderWeb extends LocationServiceProvider {
       mLocation.Location location = mLocation.Location();
       hasPermission = await _handlePermission(location);
       if (hasPermission) {
-        var locationData = await location.getLocation();
+        mLocation.LocationData locationData = await location.getLocation();
         position ??= Position.fromMap({
           'latitude': locationData.latitude ?? 0,
           'longitude': locationData.longitude ?? 0,
@@ -43,7 +43,6 @@ class LocationServiceProviderWeb extends LocationServiceProvider {
   Future<bool> _handlePermission(mLocation.Location location) async {
     bool _serviceEnabled;
     mLocation.PermissionStatus _permissionGranted;
-    mLocation.LocationData _locationData;
 
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
