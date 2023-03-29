@@ -2,7 +2,6 @@ library geolocator_cn;
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-// import 'package:geolocator_cn/src/providers/web.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:coordtransform/coordtransform.dart';
 import 'src/providers/baidu.dart';
@@ -24,7 +23,6 @@ class GeolocatorCNProviders {
   static LocationServiceProviderSystem system = LocationServiceProviderSystem();
   static LocationServiceProviderAmap amap = LocationServiceProviderAmap(
       config['amap']['android'], config['amap']['ios']);
-  // static LocationServiceProviderWeb web = LocationServiceProviderWeb();
   static LocationServiceProviderIPaddr ip = LocationServiceProviderIPaddr();
 }
 
@@ -53,32 +51,15 @@ class GeolocatorCN {
   /// get the current location
   Future<LocationData> getLocation({CRS crs = CRS.gcj02}) async {
     LocationData location = LocationData();
-    Completer c = Completer();
     if(kIsWeb){
-      // GeolocatorCNProviders.web.getLocation().then((value) {
-      //   if (c.isCompleted != true) {
-      //     c.complete(value);
-      //   }
-      // }).catchError((e) {
-      //   print(e);
-      // });
       GeolocatorCNProviders.system.getLocation().then((value) {
-        if (c.isCompleted != true) {
-          c.complete(value);
-        }
+        location = value;
       }).catchError((e) {
         print(e);
       });
-      try {
-        location = await c.future;
-      } catch (e) {
-        print(e);
-        location = await GeolocatorCNProviders.ip.getLocation();
-      }
     }else{
       if (await hasPermission() == true) {
-
-
+        Completer c = Completer();
         /// 哪个先返回有效结果就用哪个
         for (var provider in providers) {
           if(!provider.isEnable()){
