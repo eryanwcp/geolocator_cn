@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:geolocator_cn/src/types.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -15,8 +16,10 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
     Position? position;
 
     try {
-      position = await Geolocator.getLastKnownPosition(
-          forceAndroidLocationManager: true);
+      if(!kIsWeb){
+        position = await Geolocator.getLastKnownPosition(
+            forceAndroidLocationManager: true);
+      }
 
       position ??= await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
