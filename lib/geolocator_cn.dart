@@ -55,9 +55,7 @@ class GeolocatorCN {
     LocationData location = LocationData();
     if(kIsWeb){
       GeolocatorCNProviders.web.getLocation().then((value) {
-        if (value.latitude != 0 && value.longitude != 0) {
-          location = value;
-        }
+        location = value;
       }).catchError((e) {
         print(e);
       });
