@@ -55,20 +55,31 @@ class GeolocatorCN {
   /// get the current location
   Future<LocationData> getLocation({CRS crs = CRS.gcj02}) async {
     LocationData location = LocationData();
+    Completer c = Completer();
     if(kIsWeb){
       GeolocatorCNProviders.web.getLocation().then((value) {
-        location = value;
+        if (c.isCompleted != true) {
+          c.complete(value);
+        }
       }).catchError((e) {
         print(e);
       });
       GeolocatorCNProviders.web2.getLocation().then((value) {
-        location = value;
+        if (c.isCompleted != true) {
+          c.complete(value);
+        }
       }).catchError((e) {
         print(e);
       });
+      try {
+        location = await c.future;
+      } catch (e) {
+        print(e);
+        location = await GeolocatorCNProviders.ip.getLocation();
+      }
     }else{
       if (await hasPermission() == true) {
-        Completer c = Completer();
+
 
         /// 哪个先返回有效结果就用哪个
         for (var provider in providers) {
