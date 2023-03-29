@@ -1,17 +1,11 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:geolocator_cn/src/types.dart';
-import 'package:geolocator_web/geolocator_web.dart';
+import 'package:location/location.dart' as mLocation;
 
 class LocationServiceProviderWeb extends LocationServiceProvider {
   @override
   String name = 'web';
 
-  static const String _locationServicesDisabledMessage =
-      'Location services are disabled.';
-  static const String _permissionDeniedMessage = 'Permission denied.';
-  static const String _permissionDeniedForeverMessage =
-      'Permission denied forever.';
-
-  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 
   LocationServiceProviderWeb();
 
@@ -23,9 +17,15 @@ class LocationServiceProviderWeb extends LocationServiceProvider {
     Position? position;
     bool hasPermission = false;
     try {
-      hasPermission = await _handlePermission();
+      mLocation.Location location = mLocation.Location();
+      hasPermission = await _handlePermission(location);
       if (hasPermission) {
-        position ??= await _geolocatorPlatform.getCurrentPosition();
+        var locationData = await location.getLocation();
+        position ??= Position.fromMap({
+          'latitude': locationData.latitude ?? 0,
+          'longitude': locationData.longitude ?? 0,
+          'accuracy': locationData.accuracy ?? 0
+        });
       }
     } catch (e) {
       print(e);
@@ -40,42 +40,27 @@ class LocationServiceProviderWeb extends LocationServiceProvider {
         accuracy: position?.accuracy ?? 0);
   }
 
-  Future<bool> _handlePermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  Future<bool> _handlePermission(mLocation.Location location) async {
+    bool _serviceEnabled;
+    mLocation.PermissionStatus _permissionGranted;
+    mLocation.LocationData _locationData;
 
-    // Test if location services are enabled.
-    serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      print(_locationServicesDisabledMessage);
-      return false;
-    }
-
-    permission = await _geolocatorPlatform.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await _geolocatorPlatform.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        print(_permissionDeniedMessage);
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
         return false;
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      print(_permissionDeniedForeverMessage);
-      return false;
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == mLocation.PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != mLocation.PermissionStatus.granted) {
+        return false;
+      }
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     return true;
   }
 
