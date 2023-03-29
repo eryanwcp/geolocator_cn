@@ -1,6 +1,7 @@
 library geolocator_cn;
 
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:coordtransform/coordtransform.dart';
 import 'src/providers/baidu.dart';
@@ -50,37 +51,48 @@ class GeolocatorCN {
   /// get the current location
   Future<LocationData> getLocation({CRS crs = CRS.gcj02}) async {
     LocationData location = LocationData();
-
-    if (await hasPermission() == true) {
-      Completer c = Completer();
-
-      /// 哪个先返回有效结果就用哪个
-      for (var provider in providers) {
-        if(!provider.isEnable()){
-          print("GPS服务不可用：${provider.name}");
-        }else{
-          provider.getLocation().then((value) {
-            if (value.latitude != 0 && value.longitude != 0) {
-              if (c.isCompleted != true) {
-                c.complete(value);
-              }
-            }
-          }).catchError((e) {
-            print(e);
-          });
+    if(kIsWeb){
+      GeolocatorCNProviders.system.getLocation().then((value) {
+        if (value.latitude != 0 && value.longitude != 0) {
+          location = value;
         }
-      }
-
-      try {
-        location = await c.future;
-      } catch (e) {
+      }).catchError((e) {
         print(e);
+      });
+    }else{
+      if (await hasPermission() == true) {
+        Completer c = Completer();
+
+        /// 哪个先返回有效结果就用哪个
+        for (var provider in providers) {
+          if(!provider.isEnable()){
+            print("GPS服务不可用：${provider.name}");
+          }else{
+            provider.getLocation().then((value) {
+              if (value.latitude != 0 && value.longitude != 0) {
+                if (c.isCompleted != true) {
+                  c.complete(value);
+                }
+              }
+            }).catchError((e) {
+              print(e);
+            });
+          }
+        }
+
+        try {
+          location = await c.future;
+        } catch (e) {
+          print(e);
+          location = await GeolocatorCNProviders.ip.getLocation();
+        }
+      } else {
+        /// if we cat't get permission, we can only use the ip location api
         location = await GeolocatorCNProviders.ip.getLocation();
       }
-    } else {
-      /// if we cat't get permission, we can only use the ip location api
-      location = await GeolocatorCNProviders.ip.getLocation();
     }
+
+
 
     /// transform the location to the specified crs and return
     LocationData ret = _transormCrs(location, location.crs, crs);
