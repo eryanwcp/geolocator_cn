@@ -108,7 +108,7 @@ class LocationData {
   int get hashCode => latitude.hashCode ^ longitude.hashCode ^ crs.hashCode;
 
   bool isSuccess() {
-    return true;
+    return longitude != 0 && latitude != 0;
   }
 
   bool hasAddress() {
