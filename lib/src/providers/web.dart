@@ -32,7 +32,6 @@ class LocationServiceProviderWeb extends LocationServiceProvider {
     }
 
     return LocationData(
-        hasPermission: hasPermission,
         latitude: position?.latitude ?? 0,
         longitude: position?.longitude ?? 0,
         crs: CRS.wgs84,
