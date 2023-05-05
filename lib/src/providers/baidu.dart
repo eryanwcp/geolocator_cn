@@ -146,8 +146,6 @@ class LocationServiceProviderBaidu extends LocationServiceProvider {
     iosOption.setIsNeedNewVersionRgc(true); // 设置是否需要返回最新版本rgc信息
     iosOption.setActivityType(BMFActivityType.fitness); // 设置应用位置类型
     iosOption.setLocationTimeout(10); // 设置位置获取超时时间
-    iosOption
-        .setDesiredAccuracy(BMFDesiredAccuracy.nearestTenMeters); // 设置预期精度参数
     iosOption.setReGeocodeTimeout(10); // 设置获取地址信息超时时间
     iosOption.setDistanceFilter(0); // 设置定位最小更新距离
     iosOption.setAllowsBackgroundLocationUpdates(false); // 是否允许后台定位
