@@ -18,7 +18,7 @@ class LocationServiceProviderIPaddr extends LocationServiceProvider {
   Future<LocationData> getLocation() async {
     try {
       if (_lastResult == null) {
-        final response = await http.get(Uri.parse("http://ip-api.com/json/"));
+        final response = await http.get(Uri.parse("http://ip-api.com/json/?lang=zh-CN"));
         if (response.statusCode == 200) {
           _lastResult = jsonDecode(response.body);
         }
