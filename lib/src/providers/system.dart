@@ -22,7 +22,7 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
       }
 
       position ??= await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
+          desiredAccuracy: LocationAccuracy.best,
           forceAndroidLocationManager: true,
           timeLimit: const Duration(seconds: 5));
     } catch (e) {
