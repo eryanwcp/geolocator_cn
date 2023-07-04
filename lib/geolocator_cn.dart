@@ -2,6 +2,7 @@ library geolocator_cn;
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 // import 'package:geolocator_cn/src/providers/web.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:coordtransform/coordtransform.dart';
@@ -26,6 +27,8 @@ class GeolocatorCNProviders {
       config['amap']['android'], config['amap']['ios']);
   // static LocationServiceProviderWeb web = LocationServiceProviderWeb();
   static LocationServiceProviderIPaddr ip = LocationServiceProviderIPaddr();
+  ///
+  static int compareProviderCount = 2;
 }
 
 /// A service helper class that can use multiple location services at the same time.
@@ -153,5 +156,101 @@ class GeolocatorCN {
     } else {
       return data;
     }
+  }
+
+  Future<LocationData> getNearestLocation({CRS crs = CRS.gcj02,double? longitude, double? latitude}) async {
+    if(longitude == null || latitude == null){
+      return getLocation(crs: crs);
+    }
+    LocationData location = LocationData();
+    Completer c = Completer();
+    if(kIsWeb){
+      // GeolocatorCNProviders.web.getLocation().then((value) {
+      //   if (c.isCompleted != true) {
+      //     c.complete(value);
+      //   }
+      // }).catchError((e) {
+      //   print(e);
+      // });
+      GeolocatorCNProviders.system.getLocation().then((value) {
+        if (c.isCompleted != true) {
+          c.complete(value);
+        }
+      }).catchError((e) {
+        print(e);
+      });
+      try {
+        location = await c.future;
+      } catch (e) {
+        print(e);
+        location = await GeolocatorCNProviders.ip.getLocation();
+      }
+    }else{
+      if (await hasPermission() == true) {
+        List<LocationData> results = [];
+        int enableCount = 0;
+        /// 哪个先返回有效结果就用哪个
+        for (var provider in providers) {
+          if(!provider.isEnable()){
+            print("GPS服务不可用：${provider.name}");
+          }else{
+            enableCount ++;
+            provider.getLocation().then((value) {
+              if (value.latitude != 0 && value.longitude != 0) {
+                LocationData ret = _transormCrs(value, value.crs, crs);
+                double distance = _getDistance(ret.longitude,ret.latitude,longitude,latitude);
+                //减去偏移值
+                distance = distance <= value.accuracy ? 0:distance - value.accuracy;
+
+                value.distance = distance;
+
+                results.add(value);
+                print("${provider.name}:$distance");
+              }
+            }).catchError((e) {
+              print(e);
+            });
+          }
+        }
+
+        Timer.periodic(const Duration(milliseconds: 200), (timer) {
+          if(results.isNotEmpty && results.length >= (GeolocatorCNProviders.compareProviderCount > enableCount ? enableCount:GeolocatorCNProviders.compareProviderCount)){
+            LocationData result = results.reduce((value, element) {
+              return value.distance < element.distance ? value : element;
+            });
+            timer.cancel();
+            c.complete(result);
+          }
+        });
+
+        try {
+          location = await c.future;
+        } catch (e) {
+          print(e);
+          location = await GeolocatorCNProviders.ip.getLocation();
+        }
+      } else {
+        /// if we cat't get permission, we can only use the ip location api
+        location = await GeolocatorCNProviders.ip.getLocation();
+      }
+    }
+
+
+
+    /// transform the location to the specified crs and return
+    LocationData ret = _transormCrs(location, location.crs, crs);
+    print('GeolocatorCN->getNearestLocation: $ret');
+
+    return ret;
+  }
+
+  double _getDistance(double _longitudeForCalculation,
+      double _latitudeForCalculation, double longitude, double latitude) {
+    return Geolocator.distanceBetween(
+      _latitudeForCalculation,
+      _longitudeForCalculation,
+      latitude,
+      longitude,
+    );
   }
 }

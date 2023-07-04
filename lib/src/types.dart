@@ -43,6 +43,9 @@ class LocationData {
   /// accuracy
   final double accuracy;
 
+  ///偏移距离
+  double distance;
+
   /// time
   final int timestamp;
 
@@ -53,6 +56,7 @@ class LocationData {
       String provider = '',
       String address = '',
       double accuracy = 500,
+      double distance = 0.0,
       int timestamp = 0}) {
     return LocationData._(
         latitude.toPrecision(6),
@@ -61,11 +65,12 @@ class LocationData {
         provider,
         address,
         accuracy.toPrecision(1),
+        distance,
         DateTime.now().millisecondsSinceEpoch ~/ 1000);
   }
 
   LocationData._(this.latitude, this.longitude, this.crs, this.provider,this.address,
-      this.accuracy, this.timestamp);
+      this.accuracy, this.distance,this.timestamp);
 
   factory LocationData.fromMap(Map<String, dynamic> dataMap) {
     return LocationData(
@@ -86,6 +91,7 @@ class LocationData {
       'provider': provider,
       'address': address,
       'accuracy': accuracy,
+      'distance': distance,
       'timestamp': timestamp
     };
   }
