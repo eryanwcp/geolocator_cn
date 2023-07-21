@@ -22,13 +22,13 @@ dependencies:
 #      url: git://github.com/eryanwcp/geolocator_cn.git
 #      ref: master
 #      path: dependencies_plugins/flutter_bmflocation
-  flutter_bmflocation: ^3.4.0
+  flutter_bmflocation: ^3.4.1
   geolocator: ^9.0.2
   http: ^1.1.0
-  permission_handler: ^10.4.1
+  permission_handler: ^10.4.3
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_lints: ^2.0.2
   flutter_test:
     sdk: flutter
 
