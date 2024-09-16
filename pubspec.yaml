@@ -7,8 +7,8 @@ issue_tracker: https://github.com/fast-flutter/geolocator_cn/issues
 homepage: https://www.lookingpet.com
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.20.0"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=2.0.0"
 
 dependencies:
   amap_flutter_location: ^3.0.0
@@ -24,9 +24,9 @@ dependencies:
 #      path: dependencies_plugins/flutter_bmflocation
 #  flutter_bmflocation: ^3.5.0
   flutter_bmflocation: 3.4.1
-  geolocator: ^10.1.0
-  http: ^1.1.0
-  permission_handler: ^11.0.1
+  geolocator: ^13.0.1
+  http: ^1.2.2
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_lints: ^3.0.1
