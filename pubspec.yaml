@@ -22,7 +22,7 @@ dependencies:
 #      url: git://github.com/eryanwcp/geolocator_cn.git
 #      ref: master
 #      path: dependencies_plugins/flutter_bmflocation
-  flutter_baidu_mapapi_map: ^3.5.0
+  flutter_baidu_mapapi_map: ^3.8.0
   flutter_bmflocation: ^3.6.0
 #  flutter_bmflocation: 3.4.1
   geolocator: ^13.0.1
