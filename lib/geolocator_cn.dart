@@ -1,11 +1,11 @@
 library geolocator_cn;
 
 import 'dart:async';
+import 'package:coordtransform_dart/coordtransform_dart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 // import 'package:geolocator_cn/src/providers/web.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:coordtransform/coordtransform.dart';
 import 'src/providers/baidu.dart';
 import 'src/providers/system.dart';
 import 'src/providers/amap.dart';
@@ -126,30 +126,30 @@ class GeolocatorCN {
         from != to &&
         data.latitude != 0 &&
         data.longitude != 0) {
-      CoordResult result = CoordResult(data.longitude, data.latitude);
+      var result = [data.longitude, data.latitude];
       if (from == CRS.wgs84 && to == CRS.gcj02) {
         result =
-            CoordTransform.transformWGS84toGCJ02(data.longitude, data.latitude);
+            CoordinateTransformUtil.wgs84ToGcj02(data.longitude, data.latitude);
       } else if (from == CRS.gcj02 && to == CRS.wgs84) {
         result =
-            CoordTransform.transformGCJ02toWGS84(data.longitude, data.latitude);
+            CoordinateTransformUtil.gcj02ToWgs84(data.longitude, data.latitude);
       } else if (from == CRS.wgs84 && to == CRS.bd09) {
         result =
-            CoordTransform.transformWGS84toBD09(data.longitude, data.latitude);
+            CoordinateTransformUtil.wgs84ToBd09(data.longitude, data.latitude);
       } else if (from == CRS.bd09 && to == CRS.wgs84) {
         result =
-            CoordTransform.transformBD09toWGS84(data.longitude, data.latitude);
+            CoordinateTransformUtil.bd09ToWgs84(data.longitude, data.latitude);
       } else if (from == CRS.gcj02 && to == CRS.bd09) {
         result =
-            CoordTransform.transformGCJ02toBD09(data.longitude, data.latitude);
+            CoordinateTransformUtil.gcj02ToBd09(data.longitude, data.latitude);
       } else if (from == CRS.bd09 && to == CRS.gcj02) {
         result =
-            CoordTransform.transformBD09toGCJ02(data.longitude, data.latitude);
+            CoordinateTransformUtil.bd09ToGcj02(data.longitude, data.latitude);
       }
 
       Map<String, dynamic> tmp = data.toMap();
-      tmp['latitude'] = result.lat;
-      tmp['longitude'] = result.lon;
+      tmp['latitude'] = result[1];
+      tmp['longitude'] = result[0];
       tmp['crs'] = to;
 
       return LocationData.fromMap(tmp);
