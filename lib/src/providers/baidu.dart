@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_baidu_mapapi_base/flutter_baidu_mapapi_base.dart'
-    show BMFLog, BMFMapSDK, BMF_COORD_TYPE;
 import 'package:flutter_bmflocation/flutter_bmflocation.dart';
 import 'package:geolocator_cn/src/types.dart';
 
@@ -58,17 +56,14 @@ class LocationServiceProviderBaidu extends LocationServiceProvider {
     /// 隐私政策官网链接：https://lbsyun.baidu.com/index.php?title=openprivacy
     /// 通知用户之后根据用户选择进行赋值
     _locationPlugin.setAgreePrivacy(true);
-    BMFMapSDK.setAgreePrivacy(true);
 
     /// 设置ios端ak, android端ak可以直接在清单文件中配置
     if (Platform.isIOS) {
       /// 设置ios端ak, android端ak可以直接在清单文件中配置
       _locationPlugin.authAK(iosKey);
-      BMFMapSDK.setApiKeyAndCoordType(iosKey, BMF_COORD_TYPE.BD09LL);
     }else if (Platform.isAndroid) {
       // Android 目前不支持接口设置Apikey,
       // 请在主工程的Manifest文件里设置，详细配置方法请参考官网(https://lbsyun.baidu.com/)demo
-      BMFMapSDK.setCoordType(BMF_COORD_TYPE.BD09LL);
     }
 
     _locationPlugin.getApiKeyCallback(callback: (String result) {
