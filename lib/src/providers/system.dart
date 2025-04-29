@@ -6,6 +6,8 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
   @override
   String name = 'system';
 
+
+
   LocationServiceProviderSystem();
 
   @override
@@ -15,6 +17,37 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
   Future<LocationData> getLocation() async {
     Position? position;
 
+    late LocationSettings locationSettings;
+
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      locationSettings = AndroidSettings(
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 100,
+          forceLocationManager: true,
+          intervalDuration: const Duration(seconds: 10)
+      );
+    } else if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
+      locationSettings = AppleSettings(
+        accuracy: LocationAccuracy.best,
+        activityType: ActivityType.fitness,
+        distanceFilter: 100,
+        pauseLocationUpdatesAutomatically: true,
+        // Only set to true if our app will be started up in the background.
+        showBackgroundLocationIndicator: false,
+      );
+    } else if (kIsWeb) {
+      locationSettings = WebSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 100,
+        maximumAge: Duration(minutes: 5),
+      );
+    } else {
+      locationSettings = LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 100,
+      );
+    }
+
     try {
       if(!kIsWeb){
         position = await Geolocator.getLastKnownPosition(
@@ -22,7 +55,7 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
       }
 
       position ??= await Geolocator.getCurrentPosition(
-        locationSettings: AndroidSettings(accuracy:LocationAccuracy.best,timeLimit: const Duration(seconds: 5),forceLocationManager: true));
+        locationSettings: locationSettings);
     } catch (e) {
       print(e);
     }
