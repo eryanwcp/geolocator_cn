@@ -39,7 +39,7 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
       locationSettings = WebSettings(
         accuracy: LocationAccuracy.best,
         distanceFilter: 100,
-        maximumAge: Duration(minutes: 5),
+        maximumAge: Duration(minutes: 10),
       );
     } else {
       locationSettings = LocationSettings(
