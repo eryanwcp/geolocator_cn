@@ -83,6 +83,13 @@ class LocationData {
         timestamp: dataMap['timestamp']);
   }
 
+  bool hasGPS() {
+    return longitude != null &&
+        latitude != null &&
+        longitude != 0 &&
+        latitude != 0;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'latitude': latitude,

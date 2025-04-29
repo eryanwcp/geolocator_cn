@@ -59,6 +59,9 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
     } catch (e) {
       print(e);
     }
+    if(null == position){
+      print("Unknown position.");
+    }
 
     return LocationData(
         latitude: position?.latitude ?? 0,
