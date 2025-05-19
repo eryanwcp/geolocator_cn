@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:coordtransform_dart/coordtransform_dart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocator_cn/src/providers/tianditu.dart';
 // import 'package:geolocator_cn/src/providers/web.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'src/providers/baidu.dart';
@@ -18,13 +19,13 @@ class GeolocatorCNProviders {
   static Map<String, dynamic> config = {
     'baidu': {'ios': 'YOUR API KEY'},
     'amap': {'ios': 'YOUR API KEY', 'android': 'YOUR API KEY'},
+    'tianditu': {'ios': 'YOUR API KEY', 'android': 'YOUR API KEY'},
   };
 
-  static LocationServiceProviderBaidu baidu =
-      LocationServiceProviderBaidu(config['amap']['ios']);
   static LocationServiceProviderSystem system = LocationServiceProviderSystem();
-  static LocationServiceProviderAmap amap = LocationServiceProviderAmap(
-      config['amap']['android'], config['amap']['ios']);
+  static LocationServiceProviderBaidu baidu = LocationServiceProviderBaidu(config['baidu']['ios']);
+  static LocationServiceProviderAmap amap = LocationServiceProviderAmap(config['amap']['android'], config['amap']['ios']);
+  static LocationServiceProviderTianditu tianditu = LocationServiceProviderTianditu(config['tianditu']['android'], config['tianditu']['ios']);
   // static LocationServiceProviderWeb web = LocationServiceProviderWeb();
   static LocationServiceProviderIPaddr ip = LocationServiceProviderIPaddr();
   ///
