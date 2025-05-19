@@ -6,8 +6,6 @@ class LocationServiceProviderSystem extends LocationServiceProvider {
   @override
   String name = 'system';
 
-
-
   LocationServiceProviderSystem();
 
   @override

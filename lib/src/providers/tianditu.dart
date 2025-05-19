@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator_cn/src/types.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LocationServiceProviderTianditu extends LocationServiceProvider {
   @override
@@ -10,8 +12,6 @@ class LocationServiceProviderTianditu extends LocationServiceProvider {
   String androidKey = '';
   String iosKey = '';
 
-
-  Map<String, Object>? _lastResult;
 
   @override
   LocationServiceProviderTianditu(this.androidKey, this.iosKey);
@@ -36,24 +36,61 @@ class LocationServiceProviderTianditu extends LocationServiceProvider {
   Future<LocationData> getLocation() async {
     _init();
 
-    Completer c = Completer();
-    Timer.periodic(const Duration(milliseconds: 50), (timer) {
-      if (_lastResult?['latitude'] != null &&
-          _lastResult?['longitude'] != null) {
-        timer.cancel();
-        c.complete(_lastResult);
-      }
-    });
+    Position? position;
 
-    await c.future;
+    late LocationSettings locationSettings;
+
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      locationSettings = AndroidSettings(
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 100,
+          forceLocationManager: true,
+          intervalDuration: const Duration(seconds: 10)
+      );
+    } else if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
+      locationSettings = AppleSettings(
+        accuracy: LocationAccuracy.best,
+        activityType: ActivityType.fitness,
+        distanceFilter: 100,
+        pauseLocationUpdatesAutomatically: true,
+        // Only set to true if our app will be started up in the background.
+        showBackgroundLocationIndicator: false,
+      );
+    } else if (kIsWeb) {
+      locationSettings = WebSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 100,
+        maximumAge: Duration(minutes: 10),
+      );
+    } else {
+      locationSettings = LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 100,
+      );
+    }
+
+    try {
+      if(!kIsWeb){
+        position = await Geolocator.getLastKnownPosition(
+            forceAndroidLocationManager: true);
+      }
+
+      position ??= await Geolocator.getCurrentPosition(
+          locationSettings: locationSettings);
+    } catch (e) {
+      print(e);
+    }
+    if(null == position){
+      print("Unknown position.");
+    }
 
     return LocationData(
-        latitude: double.tryParse("${_lastResult?['latitude']}") ?? 0,
-        longitude: double.tryParse("${_lastResult?['longitude']}") ?? 0,
-        accuracy: double.tryParse("${_lastResult?['accuracy']}") ?? 0,
-        crs: CRS.gcj02,
+        latitude: position?.latitude ?? 0,
+        longitude: position?.longitude ?? 0,
+        crs: CRS.wgs84,
         provider: name,
-        address: "${_lastResult?['address']}");
+        address: '',
+        accuracy: position?.accuracy ?? 0);
   }
 
 }
