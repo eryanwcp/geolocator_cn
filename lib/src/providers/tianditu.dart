@@ -28,7 +28,7 @@ class LocationServiceProviderTianditu extends LocationServiceProvider {
     }
 
     assert(androidKey.isNotEmpty, '$name: android key is empty');
-    assert(iosKey.isNotEmpty, '$name: ios key is empty');
+    // assert(iosKey.isNotEmpty, '$name: ios key is empty');
     inited = true;
   }
 
