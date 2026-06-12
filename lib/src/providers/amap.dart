@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:amap_flutter_location_plus_x/amap_flutter_location_plus.dart';
+import 'package:amap_flutter_location_plus_x/amap_location_option.dart';
 import 'package:geolocator_cn/src/types.dart';
-import 'package:amap_flutter_location/amap_flutter_location.dart';
-import 'package:amap_flutter_location/amap_location_option.dart';
 
 class LocationServiceProviderAmap extends LocationServiceProvider {
   @override

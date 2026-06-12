@@ -148,6 +148,16 @@ class LocationServiceProviderBaidu extends LocationServiceProvider {
 
     Map iosMap = iosOption.getMap();
 
-    _locationPlugin.prepareLoc(androidMap, iosMap);
+    BaiduLocationOhosOption ohosOption = BaiduLocationOhosOption(coordType: BMFLocationCoordType.bd09ll,
+        locationMode: BMFLocationMode.hightAccuracy,
+        singleLocationTimeout: 10000,
+        isNeedAddress: true,
+        isNeedLocationPoiList: false,
+        isNeedLocationDescribe: false,
+        scanspan: 1000,
+        distanceFilter: 0);
+    Map ohosMap = ohosOption.getMap();
+
+    _locationPlugin.prepareLoc(androidMap, iosMap,ohosMap);
   }
 }
