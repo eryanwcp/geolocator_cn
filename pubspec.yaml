@@ -13,8 +13,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  amap_flutter_location: ^3.0.0
-#  amap_flutter_location_plus: ^3.1.2
+#  amap_flutter_location: ^3.0.0
+  amap_flutter_location_plus_x: ^3.1.5
   coordtransform_dart: ^1.0.4
   flutter_bmflocation: 3.8.4+1
   geolocator: ^14.0.2
